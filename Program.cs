@@ -1,11 +1,21 @@
+using Microsoft.AspNetCore.Authentication.Certificate;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var connectionString = builder.Configuration.GetConnectionString("HotelDbConnectionString") ?? "";
+builder.Services.AddDbContext<HotelDbContext>(options =>
+{
+    options.UseSqlServer(connectionString);
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+#region Services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -27,23 +37,83 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        x => x.AllowAnyHeader()
+        .AllowAnyOrigin()
+        .AllowAnyMethod());
+});
+builder.Services.AddAuthentication(
+        CertificateAuthenticationDefaults.AuthenticationScheme)
+    .AddCertificate();
+builder.Services.AddCertificateForwarding(options =>
+{
+    options.CertificateHeader = "ssl-client-cert";
+
+    options.HeaderConverter = (headerValue) =>
+    {
+        X509Certificate2? clientCertificate = null;
+
+        if (!string.IsNullOrWhiteSpace(headerValue))
+        {
+            clientCertificate = X509Certificate2.CreateFromPem(
+                WebUtility.UrlDecode(headerValue));
+        }
+
+        return clientCertificate!;
+    };
+});
+builder.Services.AddCertificateForwarding(options =>
+{
+    options.CertificateHeader = "X-SSL-CERT";
+
+    options.HeaderConverter = headerValue =>
+    {
+        X509Certificate2? clientCertificate = null;
+
+        if (!string.IsNullOrWhiteSpace(headerValue))
+        {
+            clientCertificate = new X509Certificate2(StringToByteArray(headerValue));
+        }
+
+        return clientCertificate!;
+
+        static byte[] StringToByteArray(string hex)
+        {
+            var numberChars = hex.Length;
+            var bytes = new byte[numberChars / 2];
+
+            for (int i = 0; i < numberChars; i += 2)
+            {
+                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+            }
+
+            return bytes;
+        }
+    };
+});
+builder.Host.UseSerilog((context, logger) => logger.WriteTo.Console().ReadFrom.Configuration(context.Configuration));
+#endregion
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger(options =>
-    {
-        //options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-        //options.RoutePrefix = string.Empty;
-        //options.SerializeAsV2 = true;
-
-    });
+    app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+app.UseSerilogRequestLogging();
+
+app.UseCertificateForwarding();
+
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
