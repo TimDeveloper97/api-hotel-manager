@@ -8,6 +8,10 @@ namespace HotelAPI.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql(@"
+            SET IDENTITY_INSERT [dbo].[Countries] ON;
+            ");
+
             migrationBuilder.CreateTable(
                 name: "Countries",
                 columns: table => new

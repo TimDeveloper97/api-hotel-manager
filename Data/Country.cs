@@ -1,4 +1,6 @@
-﻿namespace HotelAPI.Data
+﻿using System.Text.Json.Serialization;
+
+namespace HotelAPI.Data
 {
     public class Country
     {

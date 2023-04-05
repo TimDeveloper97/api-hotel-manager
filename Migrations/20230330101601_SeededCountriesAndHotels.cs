@@ -8,6 +8,8 @@ namespace HotelAPI.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+
+
             migrationBuilder.InsertData(
                 table: "Countries",
                 columns: new[] { "Id", "Name", "ShortName" },

@@ -105,15 +105,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseSerilogRequestLogging();
-
-app.UseCertificateForwarding();
-
 app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
-
-app.UseAuthentication();
 
 app.UseAuthorization();
 
