@@ -1,3 +1,4 @@
+using HotelAPI.Configurations;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -95,6 +96,8 @@ builder.Services.AddCertificateForwarding(options =>
 });
 builder.Host.UseSerilog((context, logger) => logger.WriteTo.Console().ReadFrom.Configuration(context.Configuration));
 #endregion
+
+builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 var app = builder.Build();
 
