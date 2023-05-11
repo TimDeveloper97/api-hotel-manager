@@ -1,4 +1,6 @@
 using HotelAPI.Configurations;
+using HotelAPI.Contracts;
+using HotelAPI.Models.Repository;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -98,6 +100,9 @@ builder.Host.UseSerilog((context, logger) => logger.WriteTo.Console().ReadFrom.C
 #endregion
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
+
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped(typeof(ICountriesRepository), typeof(CountriesRepository));
 
 var app = builder.Build();
 
