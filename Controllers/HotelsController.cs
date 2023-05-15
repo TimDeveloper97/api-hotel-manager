@@ -1,4 +1,6 @@
-﻿using HotelAPI.Contracts;
+﻿using AutoMapper;
+using HotelAPI.Contracts;
+using HotelAPI.Models.Hotel;
 using HotelAPI.Models.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,32 +14,37 @@ namespace HotelAPI.Controllers
     public class HotelsController : ControllerBase
     {
         private readonly IHotelsRepository _hotelsRepository;
+        private readonly IMapper _mapper;
 
-        public HotelsController(IHotelsRepository hotelsRepository)
+        public HotelsController(IHotelsRepository hotelsRepository, IMapper mapper)
         {
             this._hotelsRepository = hotelsRepository;
+            this._mapper = mapper;
         }
 
         // GET: api/<HotelsController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotels()
+        public async Task<ActionResult<IEnumerable<HotelDto>>> GetHotels()
         {
-            return await _hotelsRepository.GetAllAsync();
+            var hotels = await _hotelsRepository.GetAllAsync();
+            var getHotels = _mapper.Map<List<HotelDto>>(hotels);
+            return Ok(getHotels);
         }
 
         // GET api/<HotelsController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Hotel>> GetHotel(int id)
+        public async Task<ActionResult<HotelDto>> GetHotel(int id)
         {
             var hotel = await _hotelsRepository.GetAsync(id);
             if (hotel == null) return NotFound();
-            return hotel;
+            return Ok(_mapper.Map<HotelDto>(hotel));
         }
 
         // POST api/<HotelsController>
         [HttpPost]
-        public async Task<ActionResult<Hotel>> PostHotel([FromBody] Hotel hotel)
+        public async Task<ActionResult<Hotel>> PostHotel([FromBody] CreateHotelDto createHotel)
         {
+            var hotel = _mapper.Map<Hotel>(createHotel);
             await _hotelsRepository.AddAsync(hotel);
 
             return CreatedAtAction("GetHotel", new { id = hotel.Id }, hotel);
@@ -45,10 +52,14 @@ namespace HotelAPI.Controllers
 
         // PUT api/<HotelsController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutHotel(int id, [FromBody] Hotel hotel)
+        public async Task<IActionResult> PutHotel(int id, [FromBody] HotelDto hotelDto)
         {
-            if (id != hotel.Id) return BadRequest();
-            if (hotel == null) NotFound();
+            if (id != hotelDto.Id) return BadRequest();
+
+            var hotel = await _hotelsRepository.GetAsync(id);
+            if (hotel == null) return NotFound();
+
+            _mapper.Map(hotelDto, hotel);
 
             try
             {
