@@ -35,10 +35,10 @@ namespace HotelAPI.Migrations
                 columns: new[] { "Id", "Address", "CountryId", "Name", "Rating" },
                 values: new object[] { 2, "Ha Noi", 2, "Ha Noi", 1.5 });
 
-            migrationBuilder.InsertData(
-                table: "Hotels",
-                columns: new[] { "Id", "Address", "CountryId", "Name", "Rating" },
-                values: new object[] { 3, "Lao Cai", 3, "Lao Cai", 3.5 });
+            //migrationBuilder.InsertData(
+            //    table: "Hotels",
+            //    columns: new[] { "Id", "Address", "CountryId", "Name", "Rating" },
+            //    values: new object[] { 3, "Lao Cai", 3, "Lao Cai", 3.5 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

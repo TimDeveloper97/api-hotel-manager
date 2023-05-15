@@ -2,6 +2,7 @@ using HotelAPI.Configurations;
 using HotelAPI.Contracts;
 using HotelAPI.Models.Repository;
 using Microsoft.AspNetCore.Authentication.Certificate;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Net;
@@ -104,6 +105,7 @@ builder.Services.AddAutoMapper(typeof(MapperConfig));
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(ICountriesRepository), typeof(CountriesRepository));
 builder.Services.AddScoped(typeof(IHotelsRepository), typeof(HotelsRepository));
+builder.Services.AddIdentityCore<ApiUser>().AddRoles<IdentityRole>().AddEntityFrameworkStores<HotelDbContext>();
 
 var app = builder.Build();
 
