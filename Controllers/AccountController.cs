@@ -15,6 +15,7 @@ namespace HotelAPI.Controllers
             this._authManager = authManager;
         }
 
+        // POST: api/Account/register
         [HttpPost]
         [Route("registor")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -32,6 +33,20 @@ namespace HotelAPI.Controllers
                 return BadRequest(ModelState);
             }
             return Ok(apiUserDto);
+        }
+
+        // POST: api/Account/register
+        [HttpPost]
+        [Route("registor")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> Login([FromBody] LoginDto loginDto)
+        {
+            var isValidUser = await _authManager.Login(loginDto);
+            if(!isValidUser) return Unauthorized();
+
+            return Ok(loginDto);
         }
     }
 }
