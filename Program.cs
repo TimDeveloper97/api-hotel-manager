@@ -100,11 +100,16 @@ builder.Services.AddCertificateForwarding(options =>
 builder.Host.UseSerilog((context, logger) => logger.WriteTo.Console().ReadFrom.Configuration(context.Configuration));
 #endregion
 
+//Auto map
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 
+//DI
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(ICountriesRepository), typeof(CountriesRepository));
 builder.Services.AddScoped(typeof(IHotelsRepository), typeof(HotelsRepository));
+builder.Services.AddScoped(typeof(IAuthManager), typeof(AuthManager));
+
+//role
 builder.Services.AddIdentityCore<ApiUser>().AddRoles<IdentityRole>().AddEntityFrameworkStores<HotelDbContext>();
 
 var app = builder.Build();
