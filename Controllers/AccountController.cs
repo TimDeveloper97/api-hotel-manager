@@ -37,16 +37,16 @@ namespace HotelAPI.Controllers
 
         // POST: api/Account/register
         [HttpPost]
-        [Route("registor")]
+        [Route("login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> Login([FromBody] LoginDto loginDto)
         {
-            var isValidUser = await _authManager.Login(loginDto);
-            if(!isValidUser) return Unauthorized();
+            var authResponse = await _authManager.Login(loginDto);
+            if(authResponse == null) return Unauthorized();
 
-            return Ok(loginDto);
+            return Ok(authResponse);
         }
     }
 }

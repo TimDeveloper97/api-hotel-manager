@@ -2,11 +2,15 @@ using HotelAPI.Configurations;
 using HotelAPI.Contracts;
 using HotelAPI.Models.Repository;
 using Microsoft.AspNetCore.Authentication.Certificate;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Drawing.Imaging;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -111,6 +115,26 @@ builder.Services.AddScoped(typeof(IAuthManager), typeof(AuthManager));
 
 //role
 builder.Services.AddIdentityCore<ApiUser>().AddRoles<IdentityRole>().AddEntityFrameworkStores<HotelDbContext>();
+
+//authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; // Bearer
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters 
+    {
+        ValidateIssuerSigningKey = true,
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero,
+        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+        ValidAudience = builder.Configuration["JwtSettings:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"])),
+    };
+});
 
 var app = builder.Build();
 
