@@ -2,6 +2,7 @@
 using HotelAPI.Contracts;
 using HotelAPI.Data;
 using HotelAPI.Models.Country;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,6 +14,7 @@ namespace HotelAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CountriesController : ControllerBase
     {
         private readonly IMapper _mapper;

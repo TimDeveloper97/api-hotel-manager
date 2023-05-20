@@ -1,5 +1,6 @@
 ﻿using HotelAPI.Contracts;
 using HotelAPI.Models.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelAPI.Controllers
