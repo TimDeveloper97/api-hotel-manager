@@ -114,7 +114,10 @@ builder.Services.AddScoped(typeof(IHotelsRepository), typeof(HotelsRepository));
 builder.Services.AddScoped(typeof(IAuthManager), typeof(AuthManager));
 
 //role
-builder.Services.AddIdentityCore<ApiUser>().AddRoles<IdentityRole>().AddEntityFrameworkStores<HotelDbContext>();
+builder.Services.AddIdentityCore<ApiUser>().AddRoles<IdentityRole>()
+    .AddTokenProvider<DataProtectorTokenProvider<ApiUser>>("HotelAPI")
+    .AddEntityFrameworkStores<HotelDbContext>()
+    .AddDefaultTokenProviders();
 
 //authentication
 builder.Services.AddAuthentication(options =>

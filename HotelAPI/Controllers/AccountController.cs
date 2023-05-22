@@ -35,7 +35,7 @@ namespace HotelAPI.Controllers
             return Ok(apiUserDto);
         }
 
-        // POST: api/Account/register
+        // POST: api/Account/login
         [HttpPost]
         [Route("login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -45,6 +45,20 @@ namespace HotelAPI.Controllers
         {
             var authResponse = await _authManager.Login(loginDto);
             if(authResponse == null) return Unauthorized();
+
+            return Ok(authResponse);
+        }
+
+        // POST: api/Account/refreshToken
+        [HttpPost]
+        [Route("refreshToken")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> RefreshTOken([FromBody] AuthResponseDto authResponseDto)
+        {
+            var authResponse = await _authManager.VerifyRefreshToken(authResponseDto);
+            if (authResponse == null) return Unauthorized();
 
             return Ok(authResponse);
         }
