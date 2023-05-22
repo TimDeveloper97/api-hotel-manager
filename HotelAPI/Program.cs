@@ -1,7 +1,7 @@
-using HotelAPI.Configurations;
-using HotelAPI.Contracts;
-using HotelAPI.Middleeware;
-using HotelAPI.Models.Repository;
+using HotelAPI.Core.Configurations;
+using HotelAPI.Core.Contracts;
+using HotelAPI.Core.Middleeware;
+using HotelAPI.Core.Repository;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;

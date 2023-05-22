@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using HotelAPI.Contracts;
-using HotelAPI.Exceptions;
-using HotelAPI.Models;
-using HotelAPI.Models.Country;
+using HotelAPI.Core;
+using HotelAPI.Core.Contracts;
+using HotelAPI.Core.Country;
+using HotelAPI.Core.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

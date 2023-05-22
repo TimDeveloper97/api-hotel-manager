@@ -1,5 +1,5 @@
-﻿using HotelAPI.Contracts;
-using HotelAPI.Models.User;
+﻿using HotelAPI.Core.Contracts;
+using HotelAPI.Core.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelAPI.Controllers
