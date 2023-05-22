@@ -1,0 +1,12 @@
+E:\Git\Clone\WebApiHotel\api-hotel-manager\HotelData\obj\Debug\net6.0\HotelData.csproj.AssemblyReference.cache
+E:\Git\Clone\WebApiHotel\api-hotel-manager\HotelData\obj\Debug\net6.0\HotelData.GeneratedMSBuildEditorConfig.editorconfig
+E:\Git\Clone\WebApiHotel\api-hotel-manager\HotelData\obj\Debug\net6.0\HotelData.AssemblyInfoInputs.cache
+E:\Git\Clone\WebApiHotel\api-hotel-manager\HotelData\obj\Debug\net6.0\HotelData.AssemblyInfo.cs
+E:\Git\Clone\WebApiHotel\api-hotel-manager\HotelData\obj\Debug\net6.0\HotelData.csproj.CoreCompileInputs.cache
+E:\Git\Clone\WebApiHotel\api-hotel-manager\HotelData\bin\Debug\net6.0\HotelData.deps.json
+E:\Git\Clone\WebApiHotel\api-hotel-manager\HotelData\bin\Debug\net6.0\HotelData.dll
+E:\Git\Clone\WebApiHotel\api-hotel-manager\HotelData\bin\Debug\net6.0\HotelData.pdb
+E:\Git\Clone\WebApiHotel\api-hotel-manager\HotelData\obj\Debug\net6.0\HotelData.dll
+E:\Git\Clone\WebApiHotel\api-hotel-manager\HotelData\obj\Debug\net6.0\refint\HotelData.dll
+E:\Git\Clone\WebApiHotel\api-hotel-manager\HotelData\obj\Debug\net6.0\HotelData.pdb
+E:\Git\Clone\WebApiHotel\api-hotel-manager\HotelData\obj\Debug\net6.0\ref\HotelData.dll

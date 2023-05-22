@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using HotelAPI.Contracts;
-using HotelAPI.Data;
 using HotelAPI.Exceptions;
 using HotelAPI.Models.Country;
 using Microsoft.AspNetCore.Authorization;
