@@ -5,6 +5,7 @@ using HotelAPI.Exceptions;
 using HotelAPI.Models.Country;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,10 @@ namespace HotelAPI.Controllers
 
         // GET: api/Countries
         [HttpGet]
+        [EnableQuery] 
+        //$select=name,shortname
+        //$filter=name eq 'Cuba'
+        //$orderby=name
         public async Task<ActionResult<IEnumerable<GetCountryDto>>> GetCountries()
         {
             var countries = await _countriesRepository.GetAllAsync();

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using HotelAPI.Contracts;
+using HotelAPI.Models.Country;
+using HotelAPI.Models;
 using HotelAPI.Models.Hotel;
 using HotelAPI.Models.Repository;
 using Microsoft.AspNetCore.Authorization;
@@ -31,6 +33,14 @@ namespace HotelAPI.Controllers
             var hotels = await _hotelsRepository.GetAllAsync();
             var getHotels = _mapper.Map<List<HotelDto>>(hotels);
             return Ok(getHotels);
+        }
+
+        // GET: api/Hotel/?StartIndex=0&pagesize=25&PageNumber=1
+        [HttpGet]
+        public async Task<ActionResult<PagedResult<HotelDto>>> GetPagedHotel([FromQuery] QueryParameters queryParameters)
+        {
+            var pagedHotelResult = await _hotelsRepository.GetAllAsync<HotelDto>(queryParameters);
+            return Ok(pagedHotelResult);
         }
 
         // GET api/<HotelsController>/5
