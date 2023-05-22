@@ -26,24 +26,16 @@ namespace HotelAPI.Controllers
         public async Task<ActionResult> Register([FromBody] ApiUserDto apiUserDto)
         {
             _logger.LogInformation($"Registration attempt for {apiUserDto.Email}");
-            try
+            var errors = await _authManager.Register(apiUserDto);
+            if (errors.Any())
             {
-                var errors = await _authManager.Register(apiUserDto);
-                if (errors.Any())
+                foreach (var error in errors)
                 {
-                    foreach (var error in errors)
-                    {
-                        ModelState.AddModelError(error.Code, error.Description);
-                    }
-                    return BadRequest(ModelState);
+                    ModelState.AddModelError(error.Code, error.Description);
                 }
-                return Ok(apiUserDto);
+                return BadRequest(ModelState);
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message, $"Somethong went wrong in the {nameof(Register)} - usser registration attempt for {apiUserDto.Email}");
-                return Problem($"Something went wrong in the {nameof(Register)}", statusCode: 500);
-            }
+            return Ok(apiUserDto);
         }
 
         // POST: api/Account/login
@@ -55,18 +47,10 @@ namespace HotelAPI.Controllers
         public async Task<ActionResult> Login([FromBody] LoginDto loginDto)
         {
             _logger.LogInformation($"Login attempt for {loginDto.Email}");
-            try
-            {
-                var authResponse = await _authManager.Login(loginDto);
-                if (authResponse == null) return Unauthorized();
+            var authResponse = await _authManager.Login(loginDto);
+            if (authResponse == null) return Unauthorized();
 
-                return Ok(authResponse);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message, $"Somethong went wrong in the {nameof(Login)} - usser Login attempt for {loginDto.Email}");
-                return Problem($"Something went wrong in the {nameof(Login)}", statusCode: 500);
-            }
+            return Ok(authResponse);
         }
 
         // POST: api/Account/refreshToken
