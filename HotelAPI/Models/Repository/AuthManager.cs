@@ -14,16 +14,18 @@ namespace HotelAPI.Models.Repository
         private readonly IMapper _mapper;
         private readonly UserManager<ApiUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AuthManager> _logger;
         private ApiUser _user;
 
         private const string _refreshToken = "RefreshToken";
         private const string _loginProvider = "HotelAPI";
 
-        public AuthManager(IMapper mapper, UserManager<ApiUser> userManager, IConfiguration configuration)
+        public AuthManager(IMapper mapper, UserManager<ApiUser> userManager, IConfiguration configuration, ILogger<AuthManager> logger)
         {
             this._mapper = mapper;
             this._userManager = userManager;
             this._configuration = configuration;
+            this._logger = logger;
         }
 
         public async Task<string> CreateRefreshToken()
@@ -36,16 +38,21 @@ namespace HotelAPI.Models.Repository
 
         public async Task<AuthResponseDto> Login(LoginDto loginDto)
         {
+            _logger.LogInformation($"Looking for user with email {loginDto.Email}");
+
             bool isValidUser = false;
             _user = await _userManager.FindByEmailAsync(loginDto.Email);
             if (_user == null)
+            {
+                _logger.LogWarning($"User with email {loginDto.Email} was not found");
                 return null;
+            }
 
             isValidUser = await _userManager.CheckPasswordAsync(_user, loginDto.Password);
             if (!isValidUser) return null;
 
             var token = await GenerateToken();
-
+            _logger.LogInformation($"Token generated for user with email {loginDto.Email} with token = {token}");
             return new AuthResponseDto { Token = token, UserId = _user.Id, RefreshToken = await CreateRefreshToken() };
         }
 
