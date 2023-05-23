@@ -4,17 +4,20 @@ using HotelAPI.Core.Middleeware;
 using HotelAPI.Core.Repository;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Drawing.Imaging;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -199,6 +202,16 @@ builder.Services.AddResponseCaching(
         options.UseCaseSensitivePaths = true;
     });
 
+//headlth check
+//sqlserver health check
+builder.Services.AddHealthChecks()
+    .AddCheck<CustomHealthCheck>(
+    "Custom health check",
+    failureStatus: HealthStatus.Degraded,
+    tags: new[] { "custom" })
+    .AddSqlServer(connectionString, tags: new[] {"database"})
+    .AddDbContextCheck<HotelDbContext>(tags: new[] {"database"});
+
 //OData
 builder.Services.AddControllers().AddOData( 
     options =>
@@ -211,9 +224,38 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    //app.UseSwagger();
+    //app.UseSwaggerUI();
 }
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
+app.MapHealthChecks("/healthcheck", new HealthCheckOptions
+{
+    Predicate = healthcheck => healthcheck.Tags.Contains("custom"),
+    ResultStatusCodes = 
+    {
+        [HealthStatus.Healthy] = StatusCodes.Status200OK,
+        [HealthStatus.Unhealthy] = StatusCodes.Status500InternalServerError,
+        [HealthStatus.Degraded] = StatusCodes.Status502BadGateway,
+    },
+    ResponseWriter = WriteResponse
+    
+});
+
+app.MapHealthChecks("/databasehealthcheck", new HealthCheckOptions
+{
+    Predicate = healthcheck => healthcheck.Tags.Contains("database"),
+    ResultStatusCodes =
+    {
+        [HealthStatus.Healthy] = StatusCodes.Status200OK,
+        [HealthStatus.Unhealthy] = StatusCodes.Status500InternalServerError,
+        [HealthStatus.Degraded] = StatusCodes.Status502BadGateway,
+    },
+    ResponseWriter = WriteResponse
+
+});
 
 app.UseMiddleware<ExceptionMiddleware>();
 
@@ -241,3 +283,52 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+static Task WriteResponse(HttpContext context, HealthReport healthReport)
+{
+    var options = new JsonWriterOptions { Indented = true };
+
+    using var memoryStream = new MemoryStream();
+    using (var jsonWriter = new Utf8JsonWriter(memoryStream, options))
+    {
+        jsonWriter.WriteStartObject();
+        jsonWriter.WriteString("status", healthReport.Status.ToString());
+        jsonWriter.WriteStartObject("results");
+
+        foreach (var healthReportEntry in healthReport.Entries)
+        {
+            jsonWriter.WriteStartObject(healthReportEntry.Key);
+            jsonWriter.WriteString("status", healthReportEntry.Value.Status.ToString());
+            jsonWriter.WriteString("description", healthReportEntry.Value.Description.ToString());
+            jsonWriter.WriteStartObject("data");
+
+            foreach (var item in healthReportEntry.Value.Data)
+            {
+                jsonWriter.WritePropertyName(item.Key);
+
+                JsonSerializer.Serialize(jsonWriter, item.Value, item.Value?.GetType() ?? typeof(object));
+            }
+            jsonWriter.WriteEndObject();
+            jsonWriter.WriteEndObject();
+        }
+        jsonWriter.WriteEndObject();
+        jsonWriter.WriteEndObject();
+    }
+    return context.Response.WriteAsync(Encoding.UTF8.GetString(memoryStream.ToArray()));    
+}
+
+class CustomHealthCheck : IHealthCheck
+{
+    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        var isHealthy = true;
+
+        if(isHealthy)
+        {
+            return Task.FromResult(HealthCheckResult.Healthy("All systems are looking good ^^"));
+        }
+        return Task.FromResult(new HealthCheckResult(context.Registration.FailureStatus, "System Unhealthy"));
+    }
+}
+
+
