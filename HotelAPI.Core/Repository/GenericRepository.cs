@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using HotelAPI.Core.Contracts;
+using HotelAPI.Core.Exceptions;
 using HotelAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,9 +25,19 @@ namespace HotelAPI.Core.Repository
             return entity;
         }
 
+        public async Task<TResult> AddAsync<TSource, TResult>(TSource source)
+        {
+            var entity = _mapper.Map<T>(source);
+
+            await AddAsync(entity);
+            return _mapper.Map<TResult>(entity);
+        }
+
         public async Task DeleteAsync(int id)
         {
             var entity = await GetAsync(id);
+            if(entity == null) throw new NotFoundException(typeof(T).Name, id);
+
             _context.Set<T>().Remove(entity);
             await _context.SaveChangesAsync();
         }
@@ -59,6 +70,13 @@ namespace HotelAPI.Core.Repository
             };
         }
 
+        public async Task<List<TResult>> GetAllAsync<TResult>()
+        {
+            return await _context.Set<T>()
+                .ProjectTo<TResult>( _mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
         public async Task<T> GetAsync(int? id)
         {
             if (id == null) return null;
@@ -66,10 +84,31 @@ namespace HotelAPI.Core.Repository
             return await _context.Set<T>().FindAsync(id);
         }
 
+        public async Task<TResult?> GetAsync<TResult>(int? id)
+        {
+            if (id is null)
+                return default;
+
+            var result = await _context.Set<T>().FindAsync(id);
+            if(result is null)
+                throw new NotFoundException(typeof(T).Name, id);
+
+            return _mapper.Map<TResult>(result);
+        }
+
         public async Task UpdateAsync(T entity)
         {
             _context.Update(entity);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync<TSource>(int id, TSource source)
+        {
+            var entity = await GetAsync(id);
+            if (entity == null) throw new NotFoundException(typeof(T).Name, id);
+
+            _mapper.Map(entity, source);
+            await UpdateAsync(entity);
         }
     }
 }
