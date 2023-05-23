@@ -31,21 +31,51 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
+    //doc
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "ToDo API",
+        Title = "Hotel API",
         Description = "An ASP.NET Core Web API for managing ToDo items",
         TermsOfService = new Uri("https://example.com/terms"),
         Contact = new OpenApiContact
         {
-            Name = "Example Contact",
+            Name = "Tim Developer",
             Url = new Uri("https://example.com/contact")
         },
         License = new OpenApiLicense
         {
-            Name = "Example License",
+            Name = "Tim Developer",
             Url = new Uri("https://example.com/license")
+        }
+    });
+    
+    //jwt => put token
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using Bearer scheme.",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+    });
+
+    //jwt requirement => requirement icon show 
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                },
+                Scheme = "0auth2",
+                Name = "Bearer",
+                In = ParameterLocation.Header
+            },
+            new List<string>()
         }
     });
 });
