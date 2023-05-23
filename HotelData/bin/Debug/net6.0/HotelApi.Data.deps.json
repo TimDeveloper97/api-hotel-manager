@@ -6,13 +6,13 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v6.0": {
-      "HotelApi.Data/1.0.0": {
+      "HotelAPI.Data/1.0.0": {
         "dependencies": {
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "6.0.0",
           "Microsoft.EntityFrameworkCore.SqlServer": "7.0.5"
         },
         "runtime": {
-          "HotelApi.Data.dll": {}
+          "HotelAPI.Data.dll": {}
         }
       },
       "Azure.Core/1.24.0": {
@@ -671,7 +671,7 @@
     }
   },
   "libraries": {
-    "HotelApi.Data/1.0.0": {
+    "HotelAPI.Data/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

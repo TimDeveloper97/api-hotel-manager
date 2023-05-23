@@ -2387,7 +2387,7 @@
           "Microsoft.EntityFrameworkCore.SqlServer": "7.0.5"
         },
         "runtime": {
-          "HotelApi.Data.dll": {}
+          "HotelAPI.Data.dll": {}
         }
       }
     }

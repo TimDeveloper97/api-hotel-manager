@@ -10481,27 +10481,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ADMIN\\.nuget\\packages\\": {},
+    "C:\\Users\\RS3-55Y\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
-    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Git\\Clone\\WebApiHotel\\api-hotel-manager\\HotelAPI.Core\\HotelAPI.Core.csproj",
+      "projectUniqueName": "D:\\Server\\api-hotel-manager\\HotelAPI.Core\\HotelAPI.Core.csproj",
       "projectName": "HotelAPI.Core",
-      "projectPath": "E:\\Git\\Clone\\WebApiHotel\\api-hotel-manager\\HotelAPI.Core\\HotelAPI.Core.csproj",
-      "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-      "outputPath": "E:\\Git\\Clone\\WebApiHotel\\api-hotel-manager\\HotelAPI.Core\\obj\\",
+      "projectPath": "D:\\Server\\api-hotel-manager\\HotelAPI.Core\\HotelAPI.Core.csproj",
+      "packagesPath": "C:\\Users\\RS3-55Y\\.nuget\\packages\\",
+      "outputPath": "D:\\Server\\api-hotel-manager\\HotelAPI.Core\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
       ],
       "configFilePaths": [
-        "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\RS3-55Y\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
@@ -10518,8 +10516,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "E:\\Git\\Clone\\WebApiHotel\\api-hotel-manager\\HotelData\\HotelAPI.Data.csproj": {
-              "projectPath": "E:\\Git\\Clone\\WebApiHotel\\api-hotel-manager\\HotelData\\HotelAPI.Data.csproj"
+            "D:\\Server\\api-hotel-manager\\HotelData\\HotelAPI.Data.csproj": {
+              "projectPath": "D:\\Server\\api-hotel-manager\\HotelData\\HotelAPI.Data.csproj"
             }
           }
         }
@@ -10567,7 +10565,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100-preview.6.22352.1\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }

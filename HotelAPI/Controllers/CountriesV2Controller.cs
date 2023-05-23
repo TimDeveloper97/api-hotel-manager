@@ -30,11 +30,11 @@ namespace HotelAPI.Controllers
         }
 
         // GET: api/Countries
-        [HttpGet]
-        [EnableQuery] 
         //$select=name,shortname
         //$filter=name eq 'Cuba'
         //$orderby=name
+        [HttpGet]
+        [EnableQuery]
         public async Task<ActionResult<IEnumerable<GetCountryDto>>> GetCountries()
         {
             var countries = await _countriesRepository.GetAllAsync();
