@@ -1,12 +1,13 @@
-using HotelAPI.Configurations;
-using HotelAPI.Contracts;
-using HotelAPI.Middleeware;
-using HotelAPI.Models.Repository;
+using HotelAPI.Core.Configurations;
+using HotelAPI.Core.Contracts;
+using HotelAPI.Core.Middleeware;
+using HotelAPI.Core.Repository;
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -166,6 +167,13 @@ builder.Services.AddResponseCaching(
     options => {
         options.MaximumBodySize = 1024;
         options.UseCaseSensitivePaths = true;
+    });
+
+//OData
+builder.Services.AddControllers().AddOData( 
+    options =>
+    {
+        options.Select().Filter().OrderBy();
     });
 
 var app = builder.Build();

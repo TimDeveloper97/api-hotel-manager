@@ -1,5 +1,5 @@
-﻿using HotelAPI.Contracts;
-using HotelAPI.Models.User;
+﻿using HotelAPI.Core.Contracts;
+using HotelAPI.Core.User;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelAPI.Controllers
@@ -19,7 +19,7 @@ namespace HotelAPI.Controllers
 
         // POST: api/Account/register
         [HttpPost]
-        [Route("registor")]
+        [Route("register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -59,7 +59,7 @@ namespace HotelAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> RefreshTOken([FromBody] AuthResponseDto authResponseDto)
+        public async Task<ActionResult> RefreshToken([FromBody] AuthResponseDto authResponseDto)
         {
             var authResponse = await _authManager.VerifyRefreshToken(authResponseDto);
             if (authResponse == null) return Unauthorized();

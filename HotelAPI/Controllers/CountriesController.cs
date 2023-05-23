@@ -1,16 +1,11 @@
 ﻿using AutoMapper;
-using HotelAPI.Contracts;
-using HotelAPI.Data;
-using HotelAPI.Exceptions;
-using HotelAPI.Models;
-using HotelAPI.Models.Country;
+using HotelAPI.Core;
+using HotelAPI.Core.Contracts;
+using HotelAPI.Core.Country;
+using HotelAPI.Core.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HotelAPI.Controllers
 {
